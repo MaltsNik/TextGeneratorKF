@@ -1,0 +1,9 @@
+spring:
+  kafka:
+    topic: "text-generator"
+    producer:
+      bootstrap-server: "localhost:9092"
+
+logging:
+  level:
+    feign: DEBUG

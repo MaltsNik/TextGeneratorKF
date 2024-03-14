@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/text-generator-db
+    username: postgres
+    password: postgres
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+      show_sql: true
+
+  kafka:
+    topic: "text-generator"
+    consumer:
+      group-id: "test-group"
+      bootstrap-server: "localhost:9092"
+      client-id: "text-consumer"
+      auto-offset-reset: earliest
