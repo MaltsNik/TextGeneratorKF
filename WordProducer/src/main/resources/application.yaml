@@ -1,8 +1,17 @@
 spring:
+  sendTypeKafka: "sendKafka"
   kafka:
     topic: "text-generator"
     producer:
       bootstrap-server: "localhost:9092"
+
+  sendTypeFeign: "sendFeign"
+  cloud:
+    openfeign:
+      client:
+        config:
+          word:
+            url: http://localhost:8080
 
 logging:
   level:
