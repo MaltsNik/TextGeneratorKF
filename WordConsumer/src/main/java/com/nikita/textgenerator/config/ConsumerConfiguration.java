@@ -17,6 +17,7 @@ import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.JacksonUtils;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
@@ -47,12 +48,14 @@ public class ConsumerConfiguration {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-group-2");
         props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "com.nikita.textgenerator.repository.entity.Word");
         props.put(JsonDeserializer.TYPE_MAPPINGS, "com.nikita.textgenerator.repository.entity.Word:com.nikita.textgenerator.repository.entity.Word");
         props.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "com.nikita.textgenerator.repository.entity.Word");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3);
-        props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 3_000);
+        props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG,3_000);
 
         var kafkaConsumerFactory = new DefaultKafkaConsumerFactory<String, Word>(props);
         kafkaConsumerFactory.setValueDeserializer(new JsonDeserializer<>(objectMapper));
@@ -68,6 +71,7 @@ public class ConsumerConfiguration {
         factory.setConcurrency(1);
         factory.getContainerProperties().setIdleBetweenPolls(1_000);
         factory.getContainerProperties().setPollTimeout(1_000);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         var executor = new SimpleAsyncTaskExecutor("kafka-consumer-");
         executor.setConcurrencyLimit(10);
         var listenerTaskExecutor = new ConcurrentTaskExecutor(executor);
@@ -77,6 +81,6 @@ public class ConsumerConfiguration {
 
     @Bean
     public NewTopic topic() {
-        return TopicBuilder.name(topicName).partitions(1).replicas(1).build();
+        return TopicBuilder.name(topicName).partitions(2).replicas(1).build();
     }
 }

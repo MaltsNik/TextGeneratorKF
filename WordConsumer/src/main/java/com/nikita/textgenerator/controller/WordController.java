@@ -20,9 +20,9 @@ public class WordController {
         this.wordService = wordService;
     }
 
-    @PostMapping
-    public ResponseEntity<Word> saveWord(@RequestBody Word word) {
-        log.info(word.toString());
-        return ResponseEntity.ok(wordService.saveWord(word));
-    }
+//    @PostMapping
+//    public ResponseEntity<Word> saveWord(@RequestBody Word word) throws InterruptedException {
+//        log.info(word.toString());
+//        return ResponseEntity.ok(wordService.saveWord(word));
+//    }
 }

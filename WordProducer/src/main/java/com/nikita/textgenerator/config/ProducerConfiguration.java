@@ -59,14 +59,13 @@ public class ProducerConfiguration {
 
     @Bean
     public NewTopic topic() {
-        return TopicBuilder.name(topicName).partitions(1).build();
+        return TopicBuilder.name(topicName).partitions(2).build();
     }
 
     @Bean
     public WordSender wordSender(NewTopic topic, KafkaTemplate<String, Word> kafkaTemplate) {
         return new WordSendService(
                 kafkaTemplate,
-                value -> log.info("asked, value:{} ", value),
                 topic.name());
     }
 
